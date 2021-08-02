@@ -1,15 +1,25 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <Grid msg="vuedoku" :gridVals="grid"/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Grid from './components/Grid'
+import gridDefn from './assets/gridDefn'
+import convertToGrid from './utilities/convertToGrid'
+import solver from './modules/solver'
+
+let grid = convertToGrid(gridDefn);
+solver(grid);
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Grid
+  },
+  data() {
+      return {
+          grid: grid,
+      }
   }
 }
 </script>
