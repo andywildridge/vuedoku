@@ -1,27 +1,34 @@
 <template>
-  <Grid msg="vuedoku" :gridVals="grid"/>
+  <Grid title="sudoku" :gridVals="gridCandidates" :hint="hint" />
 </template>
 
 <script>
-import Grid from './components/Grid'
-import gridDefn from './assets/gridDefn'
-import convertToGrid from './utilities/convertToGrid'
-import solver from './modules/solver'
+import Grid from "./components/Grid";
+import gridDefn from "./assets/gridDefn";
+import convertToGrid from "./utilities/convertToGrid";
+import solver from "./modules/solver";
 
 let grid = convertToGrid(gridDefn);
-solver(grid);
+let { gridCandidates, hint } = solver(grid);
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     Grid
   },
   data() {
-      return {
-          grid: grid,
-      }
+    return {
+      gridCandidates: grid.map((i, idx) => {
+        if (i > 0) {
+          return { val: i, type: "original" };
+        } else {
+          return { val: [...gridCandidates.get(idx)].join( ' ' ), type: "possibles" };
+        }
+      }),
+      hint,
+    };
   }
-}
+};
 </script>
 
 <style>

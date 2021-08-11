@@ -1,22 +1,40 @@
 <template>
   <div>
-    <h2>{{msg}}</h2>
+    <h2>{{ title }}</h2>
     <div id="grid">
-      <div class="square" v-for="(square, index) in gridVals" :key="index">
-          {{ square }}
+      <div
+        class="square"
+        v-for="(square, index) in gridData"
+        :key="index"
+        :class="square.type"
+        :gridSingle="square.gridSingle"
+        :collectionSingle="square.collectionSingle"
+      >
+        {{ square.val }}
       </div>
     </div>
+    <h3>{{ hints }}</h3>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Grid',
+  name: "Grid",
   props: {
-    msg: String,
-    gridVals: Array
+    title: String,
+    gridVals: Array,
+    hint: Object
+  },
+  data() {
+    return {
+      gridData: [...this.gridVals].map((i) => {
+        return {
+          ...i
+        };
+      })
+    };
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -24,6 +42,10 @@ export default {
 h2 {
   color: red;
 }
+h3 {
+  color: green;
+}
+
 #grid {
   width: 200px;
   height: 200px;
@@ -34,7 +56,15 @@ h2 {
   cursor: pointer;
   background-size: contain;
 }
-.square{
+.square {
   background: white;
 }
+.square.possibles {
+  font-size: 7px;
+}
+.square[gridSingle] {
+  background: yellow;
+}
+.square[collectionSingle] { background: green; }
+
 </style>
