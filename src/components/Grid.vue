@@ -13,7 +13,7 @@
         {{ square.val }}
       </div>
     </div>
-    <h3>{{ hints }}</h3>
+    <h3>{{ hint }}</h3>
   </div>
 </template>
 
@@ -23,16 +23,18 @@ export default {
   props: {
     title: String,
     gridVals: Array,
-    hint: Object
+    hint: String
   },
   data() {
     return {
-      gridData: [...this.gridVals].map((i) => {
-        return {
-          ...i
-        };
-      })
+      gridData: this.gridVals,
     };
+  },
+  watch: {
+    gridVals: function () {
+      console.log("gv");
+      this.gridData = this.gridVals;
+    }
   }
 };
 </script>
