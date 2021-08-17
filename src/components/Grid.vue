@@ -6,14 +6,15 @@
         class="square"
         v-for="(square, index) in gridData"
         :key="index"
-        :class="square.type"
+        :class="{[square.type]: true, [square.highlight]: square.highlight}"
         :gridSingle="square.gridSingle"
         :collectionSingle="square.collectionSingle"
       >
         {{ square.val }}
       </div>
     </div>
-    <h3>{{ hint }}</h3>
+    <h3>{{ hint?.message }}</h3>
+    <!--<h5>{{ hint }}</h5>-->
   </div>
 </template>
 
@@ -23,17 +24,30 @@ export default {
   props: {
     title: String,
     gridVals: Array,
-    hint: String
+    hint: Object
   },
   data() {
     return {
       gridData: this.gridVals,
+      highlights: {},
     };
   },
   watch: {
-    gridVals: function () {
-      console.log("gv");
-      this.gridData = this.gridVals;
+    gridVals: function() {
+      console.log(this.highlights);
+      this.gridData = this.gridVals.map((square)=>{
+        // console.log(square, idx);
+        return {
+          ...square,
+        }
+      });
+      console.log(this.gridData);
+    },
+    hint: function() {
+      console.log("hint change");
+      this.highlights = {
+        target: this.hint.index
+      }
     }
   }
 };
@@ -61,9 +75,22 @@ h3 {
 .square {
   background: white;
 }
+.square.original {
+  font-weight: bold;
+}
 .square.possibles {
   font-size: 7px;
 }
+.square.target {
+  background: green;
+}
+.square.not {
+  background: yellow;
+}
+.square.number { background: pink; }
+.square.blockingNumber { background: pink; }
+
+
 .square[gridSingle] {
   background: yellow;
 }

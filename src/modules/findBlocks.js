@@ -1,11 +1,18 @@
 export { findBlocks }
 
+/* e.g.
+    3: 1,5
+    4: 1,5,7,8
+    7: 1,5,7,8
+    9: 1,5
+*/
+
 function findBlocks(rowColBoxCandidates, gridCandidates){
-    console.log(gridCandidates);
+    // console.log(gridCandidates);
     const results = [];
     ['rows','cols','boxes'].forEach(type=>{
         for(let i=1; i<=9; i++){
-            let r = getRelatedCollections(rowColBoxCandidates, type, i);
+            let r = getRelatedCollections(rowColBoxCandidates, type, i, gridCandidates);
             if(r){
                 results.push(r);
             }
@@ -26,8 +33,8 @@ function getRelatedCollections(rowColBoxCandidates, type, index){
     }
     //console.log(candidates, combined);
     let pairs = blocks(candidates,2);
-    //console.log(type, index, blocks(candidates,2));
     if(pairs.length){
+        // convert pairs to indecies
         return { type, index, pairs }
     }
     return false;
@@ -56,9 +63,9 @@ function blocks(collections, groupSize){
         return arr.concat(collections[i]);
     },[]);
     let uniquePossibles = [...new Set(allPossibles)].sort();
-    console.time('p');
+    // console.time('p');
     let permutations = grouping(groupSize, uniquePossibles.length);
-    console.timeEnd('p');
+    // console.timeEnd('p');
     return permutations.reduce((arr,i)=>{
         let permutation = i.map( j => uniquePossibles[j] ); 
         let canContain = collectionKeys.filter(collectionKey=>{

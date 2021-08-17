@@ -7,9 +7,10 @@ const solver = (grid) => {
   let gridCandidates = findGridCandidates(grid);
 
   function analyse() {
-    console.log("solver", gridCandidates);
+    //console.log("solver", gridCandidates);
     console.time("Time this");
     let rowColBoxCandidates = findRowColBoxCandidates(gridCandidates);
+    //console.log("rcb", rowColBoxCandidates);
     console.timeEnd("Time this");
     return {
       rowColBoxCandidates,
@@ -19,12 +20,13 @@ const solver = (grid) => {
   let { rowColBoxCandidates } = analyse();
 
   function hint() {
-    return getHint(rowColBoxCandidates, gridCandidates);
+    ({ rowColBoxCandidates } = analyse());
+    return getHint(rowColBoxCandidates, gridCandidates, grid);
   }
 
   function setSquare(index, number) {
     grid[index] = number;
-    console.log(grid);
+    // console.log(grid);
     gridCandidates.gridCandidates.delete(index);
 
     const gridInfo = gridCandidates.gridReference({ index });

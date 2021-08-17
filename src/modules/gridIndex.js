@@ -1,3 +1,5 @@
+import { unionArrays } from './arrayUtils'
+
 // calc and cache 
 const gridIndexUtil = () => {
 	//0-8 index of start/floor of row, col box
@@ -60,24 +62,30 @@ const gridIndexUtil = () => {
 					console.log(gridIndex, 'cacheBox')
 					collectionCache.box[floors.box] = getBoxIndecies(floors.box);
 				}
-				indexInfo = {  // replace with map
-					gridIndex,
-					row: {
-						index: floors.row,
-						position: floors.col,
-						collection: collectionCache.row[floors.row]
-					},
-					col: {
-						index: floors.col,
-						position: floors.row,
-						collection: collectionCache.col[floors.col]
-					},
-					box: {
-						index: floors.box,
-						position: getBoxPosition(gridIndex),
-						collection: collectionCache.box[floors.box]
-					}
-				}
+				indexInfo = {
+          // replace with map
+          gridIndex,
+          row: {
+            index: floors.row,
+            position: floors.col,
+            collection: collectionCache.row[floors.row],
+          },
+          col: {
+            index: floors.col,
+            position: floors.row,
+            collection: collectionCache.col[floors.col],
+          },
+          box: {
+            index: floors.box,
+            position: getBoxPosition(gridIndex),
+            collection: collectionCache.box[floors.box],
+          },
+          related: unionArrays(
+            collectionCache.row[floors.row],
+            collectionCache.col[floors.col],
+            collectionCache.box[floors.box],
+          ),
+        };
 				indexCache.set(gridIndex, indexInfo);
 			}
 			//console.log('calcDuration: ', performance.now() - now);

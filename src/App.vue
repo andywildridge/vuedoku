@@ -1,7 +1,12 @@
 <template>
   <div>
-    <Grid title="sudoku" :gridVals="gridCandidates" :hint="hintOutput" :highlights="highlights"/>
-    <button v-on:click="action">NEXT</button>
+    <Grid
+      title="sudoku"
+      :gridVals="gridCandidates"
+      :hint="hintOutput"
+      :highlights="highlights"
+    />
+    <button v-on:click="action">get hint</button>
   </div>
 </template>
 
@@ -12,18 +17,25 @@ import convertToGrid from "./utilities/convertToGrid";
 import solver from "./modules/solver";
 
 let initialGrid = convertToGrid(gridDefn);
-let { getGridCandidates, hint, setSquare, getGrid, deleteCandidate } = solver(initialGrid);
+let { getGridCandidates, hint, setSquare, getGrid, deleteCandidate } = solver(
+  initialGrid
+);
 
 let grid = getGrid();
 let gridCandidates = getGridCandidates();
-let nextHint = hint();
+let nextHint;
 
 function displayData(grid) {
+  let highlights = nextHint?.highlights || {};
   return grid.map((i, idx) => {
     if (i > 0) {
-      return { val: i, type: "original" };
+      return { val: i, type: "original", highlight: highlights[idx] };
     } else {
-      return { val: [...gridCandidates.get(idx)].join(" "), type: "possibles" };
+      return {
+        val: [...gridCandidates.get(idx)].join(" "),
+        type: "possibles",
+        highlight: highlights[idx]
+      };
     }
   });
 }
@@ -35,8 +47,8 @@ export default {
   },
   data() {
     return {
-      gridCandidates: displayData(grid),
-      hintOutput: { no: "yo" }
+      gridCandidates: displayData(grid)
+      // hintOutput: hint(),
     };
   },
   computed() {
@@ -44,21 +56,47 @@ export default {
       gridCandidates2: displayData(grid)
     };
   },
+  created() {
+    console.log("created");
+    // nextHint = hint();
+    this.showHint(nextHint);
+  },
   methods: {
+    showHint: function(nextHint) {
+      console.log("show", nextHint);
+    },
     action: function() {
-      if(nextHint.type === 'gridSingle' || nextHint.type === 'rcbSingle') {
-        setSquare(nextHint.index, nextHint.number);
-      }else if(nextHint.type === 'candidateLine') {
-        nextHint.toDelete.forEach(idx => deleteCandidate(idx, nextHint.number));
+      if (nextHint) {
+        if (nextHint.type === "gridSingle" || nextHint.type === "rcbSingle") {
+          setSquare(nextHint.index, nextHint.number);
+        } else if (nextHint.type === "candidateLine") {
+          nextHint.toDelete.forEach(idx =>
+            deleteCandidate(idx, nextHint.number)
+          );
+        } else if (nextHint.type === "blocks") {
+          console.log(nextHint);
+          nextHint.canDeleteFrom.forEach(idx => {
+            nextHint.blockNumbers.forEach(number => {
+              deleteCandidate(idx, number);
+            });
+          });
+          nextHint.canDeleteFromX.forEach(idx => {
+            [1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(number => {
+              if (!nextHint.blockNumbers.includes(number)) {
+                deleteCandidate(idx, number);
+              }
+            });
+          });
+        }
+        grid = getGrid();
+        gridCandidates = getGridCandidates();
       }
-      grid = getGrid();
-      gridCandidates = getGridCandidates();
       nextHint = hint();
-      const { number, index } = nextHint;
-      if (number) {
+      const { index } = nextHint;
+      if (nextHint.type) {
         this.hintOutput = nextHint;
         this.highlights = index;
-      }else{
+      } else {
         this.hintOutput = "no next";
       }
       this.gridCandidates = [...displayData(grid)];

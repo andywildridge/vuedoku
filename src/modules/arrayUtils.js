@@ -2,4 +2,8 @@ const removeArrayElements = (params) => params.baseArray.filter((i) => !params.e
 
 const unionArrays = (...args) => [...new Set(args.flat())];
 
-export { removeArrayElements, unionArrays };
+const intersectSets = (a, b) => {
+  return new Set([...a].filter(x => b.has(x)));
+};
+
+export { removeArrayElements, unionArrays, intersectSets };
