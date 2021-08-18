@@ -25,7 +25,7 @@ sudokuStr = `
 			004 000 000
 			080 020 003
 		`;
-
+/*
 	sudokuStr = `
 			800 000 040
 			000 071 600
@@ -38,6 +38,6 @@ sudokuStr = `
 			000 082 700
 			006 790 000
 			070 000 006
-		`;
+		`; */
 
 export default sudokuStr;

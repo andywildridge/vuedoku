@@ -14,7 +14,7 @@
       </div>
     </div>
     <h3>{{ hint?.message }}</h3>
-    <!--<h5>{{ hint }}</h5>-->
+    <h5>{{ hint }}</h5>
   </div>
 </template>
 

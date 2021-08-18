@@ -8,7 +8,7 @@ import { findDeletableFromCandidateLines } from "./findDeletableFromCandidateLin
 import { findBlocks } from "./findBlocks.js";
 import { findDeletableFromBlocks } from "./findDeletableFromBlocks.js";
 import typeConvert from "./typeConvert";
-import { sameCol, sameRow, sameBox } from './same';
+import { sameCol, sameRow, sameBox } from "./same";
 
 function getHint(rowColBoxCandidates, gridCandidates, grid) {
   // keepers
@@ -33,31 +33,37 @@ function getHint(rowColBoxCandidates, gridCandidates, grid) {
 
   if (gridSingles.length) {
     const index = gridSingles[0].index;
-    const highlights = { [index]: "target" }
-    gridCandidates.gridReference({ index }).related.forEach(i=>{
-      if(grid[i]>0) { highlights[i] = "blockingNumber" }
+    const highlights = { [index]: "target" };
+    gridCandidates.gridReference({ index }).related.forEach((i) => {
+      if (grid[i] > 0) {
+        highlights[i] = "blockingNumber";
+      }
     });
     let message = `${gridSingles[0].number} can only fit here as all other numbers already appear in the same row, column or box`;
     return { ...gridSingles[0], type: "gridSingle", highlights, message };
   } else if (singles.length) {
     let type = typeConvert(singles[0].result[0].type);
     const index = gridCandidates.gridReference({
-        [type]: singles[0].result[0].index,
-        index: singles[0].result[0].candidateList,
-      }).gridIndex;
+      [type]: singles[0].result[0].index,
+      index: singles[0].result[0].candidateList,
+    }).gridIndex;
     const highlights = { [index]: "target" };
     let nots = gridCandidates.gridReference({ index })[type].collection;
-    nots = nots.filter(i=> i !== index && gridCandidates.gridCandidates.get(i));
-    nots.forEach(i => {
-        highlights[i] = "not";
-        //why nots?
+    nots = nots.filter(
+      (i) => i !== index && gridCandidates.gridCandidates.get(i)
+    );
+    nots.forEach((i) => {
+      highlights[i] = "not";
+      //why nots?
     });
     const number = singles[0].number;
     grid.forEach((i, idx) => {
-      if(i === number) {
-        if(nots.some(j=>{ 
-          return sameRow(idx, j) || sameCol(idx, j) || sameBox(idx, j)
-        })){
+      if (i === number) {
+        if (
+          nots.some((j) => {
+            return sameRow(idx, j) || sameCol(idx, j) || sameBox(idx, j);
+          })
+        ) {
           highlights[idx] = "number";
         }
       }
@@ -79,9 +85,26 @@ function getHint(rowColBoxCandidates, gridCandidates, grid) {
       type: "candidateLine",
     };
   } else if (deletableFromBlocks.length) {
+    let block = deletableFromBlocks[0];
+    const highlights = {};
+    //window.debugger;
+    //let index = block.blockedIdxs[0];
+    //let highlights = {};
+    let nots = gridCandidates.gridReference({ index: block.blockedIdxs[0] })[
+      block.blockType
+    ].collection;
+    nots.forEach(i => {
+      highlights[i] = 'blockingNumber';
+    });
+    highlights[block.blockedIdxs[0]] = "target";
+    highlights[block.blockedIdxs[1]] = "target";
+    //console.log(index);
+    let message = `${block.blockNumbers[0]} and ${block.blockNumbers[1]} can only fit in these places in this ${block.blockType}`;
     return {
-      ...deletableFromBlocks[0],
+      ...block,
       type: "blocks",
+      message,
+      highlights,
     };
   } else {
     return {};
