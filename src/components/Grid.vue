@@ -14,7 +14,7 @@
       </div>
     </div>
     <h3>{{ hint?.message }}</h3>
-    <h5>{{ hint }}</h5>
+    <!--<h5>{{ hint }}</h5>-->
   </div>
 </template>
 
@@ -80,9 +80,10 @@ h3 {
 }
 .square.possibles {
   font-size: 7px;
+  color: rgb(255, 206, 206);
 }
 .square.target {
-  background: green;
+  background: #afffaf;
 }
 .square.not {
   background: yellow;
@@ -94,6 +95,6 @@ h3 {
 .square[gridSingle] {
   background: yellow;
 }
-.square[collectionSingle] { background: green; }
+.square[collectionSingle] { background: #afffaf; }
 
 </style>

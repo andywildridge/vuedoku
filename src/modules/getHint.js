@@ -7,102 +7,58 @@ import { findCandidateLines } from "./findCandidateLines.js";
 import { findDeletableFromCandidateLines } from "./findDeletableFromCandidateLines.js";
 import { findBlocks } from "./findBlocks.js";
 import { findDeletableFromBlocks } from "./findDeletableFromBlocks.js";
-import typeConvert from "./typeConvert";
-import { sameCol, sameRow, sameBox } from "./same";
+import gridSingleHint from "./gridSingleHint";
+import rcbSingleHint from "./rcbSingleHint";
 
 function getHint(rowColBoxCandidates, gridCandidates, grid) {
-  // keepers
-  console.log("this", rowColBoxCandidates);
-  const singles = scanCollections(rowColBoxCandidates, getSingleCandidates);
   const gridSingles = findGridSingles(gridCandidates.gridCandidates);
+  if (gridSingles.length) {
+    return gridSingleHint(gridSingles[0], gridCandidates, grid);
+  }
 
-  // restarters
+  const singles = scanCollections(rowColBoxCandidates, getSingleCandidates);
+  if (singles.length) {
+    return rcbSingleHint(singles[0], gridCandidates, grid);
+  }
+
   const candy = scanCollections(rowColBoxCandidates, findCandidateLines);
   const deletable = findDeletableFromCandidateLines(candy, gridCandidates);
-  const blocks = findBlocks(rowColBoxCandidates, gridCandidates);
-  const deletableFromBlocks = findDeletableFromBlocks(blocks, gridCandidates);
-
-  console.log(
-    gridSingles,
-    singles,
-    candy,
-    deletable,
-    deletableFromBlocks,
-    blocks,
-    gridCandidates.gridCandidates
-  );
-
-  if (gridSingles.length) {
-    const index = gridSingles[0].index;
-    const highlights = { [index]: "target" };
-    gridCandidates.gridReference({ index }).related.forEach((i) => {
-      if (grid[i] > 0) {
-        highlights[i] = "blockingNumber";
-      }
-    });
-    let message = `${gridSingles[0].number} can only fit here as all other numbers already appear in the same row, column or box`;
-    return { ...gridSingles[0], type: "gridSingle", highlights, message };
-  } else if (singles.length) {
-    let type = typeConvert(singles[0].result[0].type);
-    const index = gridCandidates.gridReference({
-      [type]: singles[0].result[0].index,
-      index: singles[0].result[0].candidateList,
-    }).gridIndex;
-    const highlights = { [index]: "target" };
-    let nots = gridCandidates.gridReference({ index })[type].collection;
-    nots = nots.filter(
-      (i) => i !== index && gridCandidates.gridCandidates.get(i)
-    );
+  if (deletable.length) {
+    const { toDelete, type, skewer, number, index } = deletable[0];
+    let message = `${number} candidate line can only fit in these places in this ${type} can remove from ${toDelete}`;
+    const highlights = {};
+    let nots = gridCandidates.gridReference({ [type]: index, index: 0 })[type]
+      .collection;
     nots.forEach((i) => {
       highlights[i] = "not";
-      //why nots?
     });
-    const number = singles[0].number;
-    grid.forEach((i, idx) => {
-      if (i === number) {
-        if (
-          nots.some((j) => {
-            return sameRow(idx, j) || sameCol(idx, j) || sameBox(idx, j);
-          })
-        ) {
-          highlights[idx] = "number";
-        }
-      }
+    toDelete.forEach((i) => {
+      highlights[i] = "target";
     });
-    let message = `${number} can only fit here as its the only place it goes in this ${type}`;
-
-    return {
-      number,
-      index,
-      typeO: type,
-      type: "rcbSingle",
-      highlights,
-      message,
-    };
-  } else if (deletable.length) {
-    // console.log(deletable);
-    const { toDelete, candidates, type } = deletable[0];
-    let message = `${toDelete} candidate line can only fit in these places in this ${type} ${candidates}`;
+    skewer.forEach((i) => {
+      highlights[i] = "blockingNumber";
+    });
     return {
       ...deletable[0],
       message,
       type: "candidateLine",
+      highlights,
     };
-  } else if (deletableFromBlocks.length) {
+  }
+
+  const blocks = findBlocks(rowColBoxCandidates, gridCandidates);
+  const deletableFromBlocks = findDeletableFromBlocks(blocks, gridCandidates);
+  if (deletableFromBlocks.length) {
     let block = deletableFromBlocks[0];
     const highlights = {};
-    //window.debugger;
-    //let index = block.blockedIdxs[0];
-    //let highlights = {};
     let nots = gridCandidates.gridReference({ index: block.blockedIdxs[0] })[
       block.blockType
     ].collection;
-    nots.forEach(i => {
-      highlights[i] = 'blockingNumber';
+    nots.forEach((i) => {
+      highlights[i] = "not";
     });
     highlights[block.blockedIdxs[0]] = "target";
     highlights[block.blockedIdxs[1]] = "target";
-    //console.log(index);
     let message = `${block.blockNumbers[0]} and ${block.blockNumbers[1]} can only fit in these places in this ${block.blockType}`;
     return {
       ...block,
