@@ -23,7 +23,7 @@ function iterateCollections(collection, type, action){
     let results = [];
     collection.forEach((candidates, index) => {
         let candidateList = action(candidates, type);
-        if(typeof candidateList === "number"){
+        if(candidateList !== false){
             results.push({ index, candidateList, type });
         }
     });

@@ -25,6 +25,7 @@ function getHint(rowColBoxCandidates, gridCandidates, grid) {
   console.log(
     gridSingles,
     singles,
+    candy,
     deletable,
     deletableFromBlocks,
     blocks,
@@ -80,8 +81,11 @@ function getHint(rowColBoxCandidates, gridCandidates, grid) {
     };
   } else if (deletable.length) {
     // console.log(deletable);
+    const { toDelete, candidates, type } = deletable[0];
+    let message = `${toDelete} candidate line can only fit in these places in this ${type} ${candidates}`;
     return {
       ...deletable[0],
+      message,
       type: "candidateLine",
     };
   } else if (deletableFromBlocks.length) {

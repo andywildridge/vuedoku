@@ -22,14 +22,17 @@ let { getGridCandidates, hint, setSquare, getGrid, deleteCandidate } = solver(
 );
 
 let grid = getGrid();
+let original = [...grid];
 let gridCandidates = getGridCandidates();
 let nextHint;
 
-function displayData(grid) {
+function displayData(grid, original) {
   let highlights = nextHint?.highlights || {};
   return grid.map((i, idx) => {
-    if (i > 0) {
+    if (original[idx] > 0) {
       return { val: i, type: "original", highlight: highlights[idx] };
+    } else if (i > 0) {
+      return { val: i, highlight: highlights[idx] };
     } else {
       return {
         val: [...gridCandidates.get(idx)].join(" "),
@@ -47,13 +50,13 @@ export default {
   },
   data() {
     return {
-      gridCandidates: displayData(grid)
+      gridCandidates: displayData(grid, original)
       // hintOutput: hint(),
     };
   },
   computed() {
     return {
-      gridCandidates2: displayData(grid)
+      gridCandidates2: displayData(grid, original)
     };
   },
   created() {
@@ -99,7 +102,7 @@ export default {
       } else {
         this.hintOutput = "no next";
       }
-      this.gridCandidates = [...displayData(grid)];
+      this.gridCandidates = [...displayData(grid, original)];
     }
   }
 };
