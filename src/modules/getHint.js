@@ -9,6 +9,8 @@ import { findBlocks } from "./findBlocks.js";
 import { findDeletableFromBlocks } from "./findDeletableFromBlocks.js";
 import gridSingleHint from "./gridSingleHint";
 import rcbSingleHint from "./rcbSingleHint";
+import candidateLineHint from "./candidateLineHint";
+import blockingHint from "./blockingHint";
 
 function getHint(rowColBoxCandidates, gridCandidates, grid) {
   const gridSingles = findGridSingles(gridCandidates.gridCandidates);
@@ -21,51 +23,20 @@ function getHint(rowColBoxCandidates, gridCandidates, grid) {
     return rcbSingleHint(singles[0], gridCandidates, grid);
   }
 
-  const candy = scanCollections(rowColBoxCandidates, findCandidateLines);
-  const deletable = findDeletableFromCandidateLines(candy, gridCandidates);
+  const candidateLines = scanCollections(rowColBoxCandidates, findCandidateLines);
+  const deletable = findDeletableFromCandidateLines(
+    candidateLines,
+    gridCandidates
+  );
   if (deletable.length) {
-    const { toDelete, type, skewer, number, index } = deletable[0];
-    let message = `${number} candidate line can only fit in these places in this ${type} can remove from ${toDelete}`;
-    const highlights = {};
-    let nots = gridCandidates.gridReference({ [type]: index, index: 0 })[type]
-      .collection;
-    nots.forEach((i) => {
-      highlights[i] = "not";
-    });
-    toDelete.forEach((i) => {
-      highlights[i] = "target";
-    });
-    skewer.forEach((i) => {
-      highlights[i] = "blockingNumber";
-    });
-    return {
-      ...deletable[0],
-      message,
-      type: "candidateLine",
-      highlights,
-    };
+    console.log(deletable)
+    return candidateLineHint(deletable[0], gridCandidates);
   }
 
   const blocks = findBlocks(rowColBoxCandidates, gridCandidates);
   const deletableFromBlocks = findDeletableFromBlocks(blocks, gridCandidates);
   if (deletableFromBlocks.length) {
-    let block = deletableFromBlocks[0];
-    const highlights = {};
-    let nots = gridCandidates.gridReference({ index: block.blockedIdxs[0] })[
-      block.blockType
-    ].collection;
-    nots.forEach((i) => {
-      highlights[i] = "not";
-    });
-    highlights[block.blockedIdxs[0]] = "target";
-    highlights[block.blockedIdxs[1]] = "target";
-    let message = `${block.blockNumbers[0]} and ${block.blockNumbers[1]} can only fit in these places in this ${block.blockType}`;
-    return {
-      ...block,
-      type: "blocks",
-      message,
-      highlights,
-    };
+    return blockingHint(deletableFromBlocks[0], gridCandidates);
   } else {
     return {};
   }

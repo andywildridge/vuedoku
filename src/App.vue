@@ -95,10 +95,10 @@ export default {
         gridCandidates = getGridCandidates();
       }
       nextHint = hint();
-      const { index } = nextHint;
-      if (nextHint.type) {
+      console.log(nextHint);
+      if (nextHint?.type) {
         this.hintOutput = nextHint;
-        this.highlights = index;
+        this.highlights = nextHint.index;
       } else {
         this.hintOutput = "no next";
       }
