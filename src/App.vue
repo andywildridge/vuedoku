@@ -13,7 +13,7 @@
 <script>
 import Grid from "./components/Grid";
 import gridDefn from "./assets/gridDefn";
-import convertToGrid from "./utilities/convertToGrid";
+import convertToGrid from "./modules/helpers/convertToGrid";
 import solver from "./modules/solver";
 
 let initialGrid = convertToGrid(gridDefn);

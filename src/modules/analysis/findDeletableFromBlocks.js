@@ -1,6 +1,6 @@
 export { findDeletableFromBlocks };
-import typeConvert from "./typeConvert";
-import { intersectSets } from "./arrayUtils";
+import typeConvert from "../helpers/typeConvert";
+import { intersectSets } from "../helpers/arrayUtils";
 
 function findDeletableFromBlocks(blocks, gridCandidates) {
   //console.log(blocks, gridCandidates);

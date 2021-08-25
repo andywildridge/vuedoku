@@ -1,5 +1,5 @@
-import typeConvert from "./typeConvert";
-import { sameCol, sameRow, sameBox } from "./same";
+import typeConvert from "../helpers/typeConvert";
+import { sameCol, sameRow, sameBox } from "../helpers/same";
 
 export default function rcbSingleHint(single, gridCandidates, grid) {
   let type = typeConvert(single.result[0].type);

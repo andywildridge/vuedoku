@@ -181,6 +181,7 @@ h3 {
     url(../assets/square.svg);
   background-size: 11.1111%, 33.3333%, 100%;
   pointer-events: none;
+  z-index: 2;
 }
 .square {
   filter: url(#PencilTexture);
@@ -190,10 +191,13 @@ h3 {
   font-size: calc(50vh / 9 - 2px);
   z-index: 1;
   overflow: hidden;
+  color: #666;
 }
 .square.original {
   font-weight: bold;
   filter: none;
+  color: #111;
+
 }
 .square.possibles {
   font-size: 7px;
