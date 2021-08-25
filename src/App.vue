@@ -1,7 +1,7 @@
 <template>
   <div>
     <Grid
-      title="sudoku"
+      title="sudoku solver"
       :gridVals="gridCandidates"
       :hint="hintOutput"
       :highlights="highlights"

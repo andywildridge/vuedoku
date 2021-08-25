@@ -63,7 +63,7 @@
         {{ getSquareVal(square) }}
       </div>
     </div>
-    <h3>{{ hint?.message }}</h3>
+    <p>{{ hint?.message }}</p>
     <!--<h5>{{ hint }}</h5>-->
     <button v-on:click="toggleInput">input</button>
     <button v-on:click="togglePossibles">possibles</button>
@@ -136,11 +136,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h2 {
-  color: red;
-}
-h3 {
-  color: green;
+h2, h3, p {
+  color: rgb(65, 65, 65);
 }
 
 #svgfilters {
@@ -205,7 +202,6 @@ h3 {
   font-size: 7px;
   color: black;
   filter: none;
-  align-items: baseline;
   align-items: baseline;
   padding: 10% 20%;
   justify-content: flex-end;
