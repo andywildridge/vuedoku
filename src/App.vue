@@ -25,6 +25,10 @@ let grid = getGrid();
 let original = [...grid];
 let gridCandidates = getGridCandidates();
 let nextHint;
+let humanise = Array.from(
+  { length: 81 },
+  () => "r" + Math.floor(Math.random() * 6)
+);
 
 function displayData(grid, original) {
   let highlights = nextHint?.highlights || {};
@@ -32,7 +36,7 @@ function displayData(grid, original) {
     if (original[idx] > 0) {
       return { val: i, type: "original", highlight: highlights[idx] };
     } else if (i > 0) {
-      return { val: i, highlight: highlights[idx] };
+      return { val: i, highlight: highlights[idx], rotate: humanise[idx] };
     } else {
       return {
         val: [...gridCandidates.get(idx)].join(" "),
@@ -109,6 +113,9 @@ export default {
 </script>
 
 <style>
+html {
+  background: #f1efe985;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

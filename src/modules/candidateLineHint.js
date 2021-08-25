@@ -1,3 +1,8 @@
+/* 
+  construct hint for eliminating candidates
+  due to candidate lines
+*/
+
 export default function candidateLineHint(deletable, gridCandidates) {
   console.log(deletable);
   const { toDelete, type, skewer, number, index } = deletable;

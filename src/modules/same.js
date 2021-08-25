@@ -1,3 +1,7 @@
+/* helper functions that test if a pair of indecies (a & b)
+  are in the same row, column or box
+*/
+
 function sameRow(a, b) {
   return Math.floor(a / 9) === Math.floor(b / 9);
 }
