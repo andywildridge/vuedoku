@@ -1,4 +1,4 @@
-import { unionArrays, intersectSets } from "@/modules/arrayUtils";
+import { unionArrays, intersectSets } from "@/modules/helpers/arrayUtils";
 
 test("union arrays", () => {
   const a = [1, 2, 3];

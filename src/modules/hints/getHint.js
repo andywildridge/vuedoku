@@ -1,12 +1,12 @@
 export { getHint };
 
-import { getSingleCandidates } from "../analysis/getSingleCandidates.js";
-import { findGridSingles } from "../analysis/findGridSingles.js";
+import { getSingleCandidates } from "../analysis/rowColBox/getSingleCandidates.js";
+import { findGridSingles } from "../analysis/gridSquares/findGridSingles.js";
 import { scanCollections } from "../analysis/scanCollections.js";
-import { findCandidateLines } from "../analysis/findCandidateLines.js";
-import { findDeletableFromCandidateLines } from "../analysis/findDeletableFromCandidateLines.js";
-import { findBlocks } from "../analysis/findBlocks.js";
-import { findDeletableFromBlocks } from "../analysis/findDeletableFromBlocks.js";
+import { findCandidateLines } from "../analysis/candidateLines/findCandidateLines.js";
+import { findDeletableFromCandidateLines } from "../analysis/candidateLines/findDeletableFromCandidateLines.js";
+import { findBlocks } from "../analysis/blocks/findBlocks.js";
+import { findDeletableFromBlocks } from "../analysis/blocks/findDeletableFromBlocks.js";
 import gridSingleHint from "./gridSingleHint";
 import rcbSingleHint from "./rcbSingleHint";
 import candidateLineHint from "./candidateLineHint";

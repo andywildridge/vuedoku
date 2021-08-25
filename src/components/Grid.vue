@@ -188,7 +188,8 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(50vh / 9 - 2px);
+  font-size: calc(50vh / 9 - 6px);
+  line-height: calc(50vh / 9 - 6px);
   z-index: 1;
   overflow: hidden;
   color: #666;
@@ -197,7 +198,8 @@ h3 {
   font-weight: bold;
   filter: none;
   color: #111;
-
+  font-size: calc(50vh / 9 - 2px);
+  line-height: calc(50vh / 9 - 2px);
 }
 .square.possibles {
   font-size: 7px;
@@ -230,12 +232,12 @@ h3 {
 .r1,
 .r2,
 .r3 {
-  transform: rotate(5deg);
+  /* transform: rotate(5deg); */
 }
 
 .r4,
 .r5,
 .r0 {
-  transform: rotate(2deg);
+  /* transform: rotate(2deg); */
 }
 </style>

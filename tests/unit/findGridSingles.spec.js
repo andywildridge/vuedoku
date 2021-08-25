@@ -1,4 +1,4 @@
-import { findGridSingles } from "@/modules/findGridSingles";
+import { findGridSingles } from "@/modules/analysis/findGridSingles";
 
 test("find grid singles", () => {
   const candidates = new Map();

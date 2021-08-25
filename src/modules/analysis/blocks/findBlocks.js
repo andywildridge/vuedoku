@@ -5,6 +5,7 @@ export { findBlocks }
     4: 1,5,7,8
     7: 1,5,7,8
     9: 1,5
+    only 3 & 9 contain 1 & 5 so can eliminate from 4 & 7
 */
 
 function findBlocks(rowColBoxCandidates, gridCandidates){

@@ -1,5 +1,5 @@
-import { findGridCandidates } from "./analysis/findGridCandidates";
-import { findRowColBoxCandidates } from "./analysis/findRowColBoxCandidates";
+import { findGridCandidates } from "./analysis/gridSquares/findGridCandidates";
+import { findRowColBoxCandidates } from "./analysis/rowColBox/findRowColBoxCandidates";
 import { getHint } from "./hints/getHint.js";
 
 const solver = (grid) => {

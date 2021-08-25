@@ -1,8 +1,8 @@
 export { findGridCandidates };
 
 //import { indexMap as gridIndexReference } from './indexMap.js';
-import { gridIndexUtil as gridIndexReference } from '../helpers/gridIndex.js';
-import { removeArrayElements } from '../helpers/arrayUtils.js';
+import { gridIndexUtil as gridIndexReference } from '../../helpers/gridIndex.js';
+import { removeArrayElements } from '../../helpers/arrayUtils.js';
 
 const sudokuVals = [1,2,3,4,5,6,7,8,9];
 
