@@ -32,6 +32,90 @@
           ></feDisplacementMap>
         </filter>
 
+        <filter
+          xmlns="http://www.w3.org/2000/svg"
+          x="0%"
+          y="0%"
+          width="100%"
+          height="100%"
+          filterUnits="objectBoundingBox"
+          id="pencilTexture3"
+        >
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.5"
+            numOctaves="5"
+            stitchTiles="stitch"
+            result="f1"
+          ></feTurbulence>
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 0, 0 0 0 0 0, 0 0 0 0 0, 0 0 0 -1.5 1.5"
+            result="f2"
+          ></feColorMatrix>
+          <feComposite
+            operator="in"
+            in2="f2b"
+            in="SourceGraphic"
+            result="f3"
+          ></feComposite>
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="1.2"
+            numOctaves="3"
+            result="noise"
+          ></feTurbulence>
+          <feDisplacementMap
+            xChannelSelector="R"
+            yChannelSelector="G"
+            scale="2.5"
+            in="f3"
+            result="f4"
+          ></feDisplacementMap>
+        </filter>
+
+        <filter
+          xmlns="http://www.w3.org/2000/svg"
+          x="0%"
+          y="0%"
+          width="120%"
+          height="120%"
+          filterUnits="objectBoundingBox"
+          id="pencilTexture3b"
+        >
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.5"
+            numOctaves="5"
+            stitchTiles="stitch"
+            result="f1"
+          ></feTurbulence>
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 0, 0 0 0 0 0, 0 0 0 0 0, 0 0 0 -1.5 1.5"
+            result="f2"
+          ></feColorMatrix>
+          <feComposite
+            operator="in"
+            in2="f2b"
+            in="SourceGraphic"
+            result="f3"
+          ></feComposite>
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="1.2"
+            numOctaves="3"
+            result="noise"
+          ></feTurbulence>
+          <feDisplacementMap
+            xChannelSelector="R"
+            yChannelSelector="G"
+            scale="2.5"
+            in="f3"
+            result="f4"
+          ></feDisplacementMap>
+        </filter>
+
         <filter id="roughpaper" x="0%" y="0%" width="100%" height="100%">
           <feTurbulence
             type="fractalNoise"
@@ -43,6 +127,64 @@
           <feDiffuseLighting in="noise" lighting-color="white" surfaceScale="2">
             <feDistantLight azimuth="45" elevation="60" />
           </feDiffuseLighting>
+        </filter>
+
+        <filter
+          xmlns="http://www.w3.org/2000/svg"
+          x="-20%"
+          y="-20%"
+          width="240%"
+          height="240%"
+          filterUnits="objectBoundingBox"
+          id="pencilTexture4"
+        >
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.03"
+            numOctaves="5"
+            seed="1"
+            result="f1"
+          ></feTurbulence>
+          <feDisplacementMap
+            xChannelSelector="R"
+            yChannelSelector="G"
+            scale="5"
+            in="SourceGraphic"
+            in2="f1"
+            result="f4"
+          ></feDisplacementMap>
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.03"
+            numOctaves="5"
+            seed="10"
+            result="f2"
+          ></feTurbulence>
+          <feDisplacementMap
+            xChannelSelector="R"
+            yChannelSelector="G"
+            scale="5"
+            in="SourceGraphic"
+            in2="f2"
+            result="f5"
+          ></feDisplacementMap>
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.03"
+            numOctaves="5"
+            seed="100"
+            result="f3"
+          ></feTurbulence>
+          <feDisplacementMap
+            xChannelSelector="R"
+            yChannelSelector="G"
+            scale="3"
+            in="SourceGraphic"
+            in2="f3"
+            result="f6"
+          ></feDisplacementMap>
+          <feBlend mode="multiply" in2="f4" in="f5" result="out1"></feBlend>
+          <feBlend mode="multiply" in="out1" in2="f6" result="out2"></feBlend>
         </filter>
       </defs>
     </svg>
@@ -63,11 +205,10 @@
         {{ getSquareVal(square) }}
       </div>
     </div>
-    <p>{{ hint?.message }}</p>
+    <p class="hint" v-html="hint?.message"></p>
     <!--<h5>{{ hint }}</h5>-->
     <button v-on:click="toggleInput">input</button>
-    <button v-on:click="togglePossibles">possibles</button>
-    <p>{{ showPossibles }}</p>
+    <button v-on:click="togglePossibles">possibles {{ showPossibles }}</button>
   </div>
 </template>
 
@@ -136,7 +277,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h2, h3, p {
+h2,
+h3,
+p {
   color: rgb(65, 65, 65);
 }
 
@@ -154,6 +297,7 @@ h2, h3, p {
   cursor: pointer;
   position: relative;
   filter: drop-shadow(0px 4px 5px #999);
+  margin-bottom: 2rem;
 }
 #grid::before {
   content: "";
@@ -181,12 +325,12 @@ h2, h3, p {
   z-index: 2;
 }
 .square {
-  filter: url(#PencilTexture);
+  filter: url(#PencilTexture3b);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(50vh / 9 - 6px);
-  line-height: calc(50vh / 9 - 6px);
+  font-size: calc(50vh / 9 - 16px);
+  line-height: calc(50vh / 9 - 16px);
   z-index: 1;
   overflow: hidden;
   color: #666;
@@ -195,8 +339,8 @@ h2, h3, p {
   font-weight: bold;
   filter: none;
   color: #111;
-  font-size: calc(50vh / 9 - 2px);
-  line-height: calc(50vh / 9 - 2px);
+  font-size: calc(50vh / 9 - 10px);
+  line-height: calc(50vh / 9 - 10px);
 }
 .square.possibles {
   font-size: 7px;
@@ -207,10 +351,12 @@ h2, h3, p {
   justify-content: flex-end;
   text-align: right;
 }
-.square.target {
+.square.target,
+.hint .target {
   background-color: #afffaf75;
 }
-.square.not {
+.square.not,
+.hint .not {
   background-color: rgba(255, 255, 0, 0.5);
 }
 .square.number {
@@ -225,15 +371,27 @@ h2, h3, p {
 .square[collectionSingle] {
   background: #afffaf;
 }
-.r1,
-.r2,
-.r3 {
-  /* transform: rotate(5deg); */
+.hint {
+  width: 40vh;
+  max-width: 90%;
+  margin: 0 auto 2rem;
+  line-height: 1.8;
 }
-
-.r4,
-.r5,
-.r0 {
-  /* transform: rotate(2deg); */
+</style>
+<style>
+.hint .target {
+  background-color: #afffaf75;
+  padding: 3px;
+  border-bottom: 1px solid #6eb16e;
+}
+.hint .not {
+  background-color: rgba(255, 255, 0, 0.5);
+  padding: 3px;
+  border-bottom: 1px solid rgba(163, 163, 6);
+}
+.hint .blockingNumber {
+  background-color: rgba(255, 192, 203, 0.5);
+  padding: 3px;
+  border-bottom: 1px solid rgb(158, 90, 101);
 }
 </style>

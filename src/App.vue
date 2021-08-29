@@ -6,7 +6,8 @@
       :hint="hintOutput"
       :highlights="highlights"
     />
-    <button v-on:click="action">get hint</button>
+    <button v-on:click="action">show next hint...</button>
+    <button v-on:click="newGrid">new</button>
   </div>
 </template>
 
@@ -71,6 +72,11 @@ export default {
   methods: {
     showHint: function(nextHint) {
       console.log("show", nextHint);
+    },
+    newGrid: function() {
+      console.log(grid);
+      grid = new Array(81).fill(0);
+      console.log(grid);
     },
     action: function() {
       if (nextHint) {

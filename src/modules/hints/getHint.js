@@ -17,15 +17,17 @@ function randomHint(type) {
 }
 
 function getHint(rowColBoxCandidates, gridCandidates, grid) {
+  const gridSingles = findGridSingles(gridCandidates.gridCandidates);
+  if (gridSingles.length) {
+    return gridSingleHint(randomHint(gridSingles), gridCandidates, grid);
+  }
+
   const singles = scanCollections(rowColBoxCandidates, getSingleCandidates);
   if (singles.length) {
     return rcbSingleHint(randomHint(singles), gridCandidates, grid);
   }
 
-  const gridSingles = findGridSingles(gridCandidates.gridCandidates);
-  if (gridSingles.length) {
-    return gridSingleHint(randomHint(gridSingles), gridCandidates, grid);
-  }
+
 
   const candidateLines = scanCollections(
     rowColBoxCandidates,
